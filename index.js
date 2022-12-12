@@ -1,18 +1,73 @@
-const http = require('node:http');
-const colors = require('colors')
-const port = 8000;
-const hostname = 'localhost';
+// const data = require('./data')
+// const http = require('node:http');
+// const port = 8000;
+// const hostname = 'localhost';
 
-const expoter = require('./expoter')
-const server = http.createServer((req, res) => {
-    res.statusCode = 200;
-    res.setHeader('Content-Type', 'text/plain');
-    res.end('Hello, World!\n');
-});
+// const server = http.createServer((req, res) => {
+//     res.statusCode = 200;
+//     res.setHeader('Content-Type', 'application/json');
+//     res.write(JSON.stringify(data.data));
+//     res.end()
+// });
 
-console.log(expoter);
-console.log("sfdksjdksd".rainbow);
-console.log(expoter.addition(10,20))
-server.listen(port, hostname, () => {
-    console.log(`Server running at http://${hostname}:${port}/`);
-});
+// server.listen(port, hostname, () => {
+//     console.log(`Server running at http://${hostname}:${port}/`);
+// });
+
+
+const express = require('express')
+
+const environ = require('./environ')
+
+const app = express();
+
+const statis_path = environ.path.static_path
+// app.use(express.static(environ.path.static_path))
+app.set('view engine','ejs');
+app.use(express.urlencoded({extended:false}))
+
+// custom middle ware in express
+const customMiddleWear = (req,resp,next)=>{
+    next();
+    // if (req.body.fname && req.body.fname) {
+    //     next();  
+    // }else{
+    //     resp.render('404')
+    // }
+}
+app.use(customMiddleWear)
+// app.get('', (req, resp) => {
+//     resp.sendFile(`${statis_path}/index.html`)
+// })
+
+
+// render direct with ejs
+
+app.get('', (req, resp) => {
+    resp.render('index')
+})
+
+app.post('/home', (req, resp) => {
+    console.log(req.body);
+    resp.redirect('/')
+})
+app.get('/about', (req, resp) => {
+    let data = {
+        tushar:"lsjkdlskd",
+        rahul:"kdfjkdfjdkf",
+        ratan:"xmcnxmcnxmc",
+        manan:"smdskjdksjdskdjsd",
+        subjects:["skdd",'s',12,5,9,"kjdskjsdk"]
+    }
+    resp.render('users/about',{data})
+})
+
+// render direct html file
+// app.get('*', (req, resp) => {
+//     resp.sendFile(`${statis_path}/404.html`)
+// })
+
+app.get('*', (req, resp) => {
+    resp.render('404')
+})
+app.listen(8000);
