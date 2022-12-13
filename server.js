@@ -7,6 +7,7 @@ const hostname = 'localhost';
 const get_app = require('./app')
 
 const server = http.createServer(get_app);
+// connection of db directly in server
 const db = require('./db_connector');
 
 server.listen(port, hostname, () => {
