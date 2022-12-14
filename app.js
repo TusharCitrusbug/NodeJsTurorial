@@ -4,6 +4,8 @@ const bodyParser = require('body-parser')
 const app = express();
 const productRoutes = require('./routes/product')
 const orderRoutes = require('./routes/orders')
+const UserRoutes = require('./routes/user')
+
 const config = require('./config')
 app.use(morgan('dev'))
 app.use(express.static('media'))
@@ -53,6 +55,7 @@ if (ENABLE_SWAGGER) {
 }
 
 app.use('/products', productRoutes)
+app.use('/users', UserRoutes)
 app.use('/orders', orderRoutes)
 app.use((req, resp, next) => {
     const error = new Error('Not Found!')

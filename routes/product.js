@@ -4,6 +4,7 @@ require('dotenv').config();
 const Product = require('../models/product');
 const router = express.Router();
 const multer = require('multer');
+// created storage for multer
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
         cb(null, './media/');
@@ -13,6 +14,7 @@ const storage = multer.diskStorage({
     }
 })
 
+// added file filtration for muletr
 const fileFilter = (req, file, cb) => {
     // reject file
     if (file.mimetype === 'image/jpeg' || file.mimetype === 'image/png') {
@@ -22,6 +24,7 @@ const fileFilter = (req, file, cb) => {
     }
 }
 
+// included all components to multer 
 const upload = multer({
     storage: storage, limits: {
         fieldSize: 1024 * 1024 * 5
