@@ -1,5 +1,6 @@
 const express = require('express')
 const bcrypt = require('bcryptjs')
+const jwt = require('jsonwebtoken');
 const mongoose = require('mongoose')
 require('dotenv').config();
 const User = require('../models/user');
@@ -52,8 +53,15 @@ router.post('/login', (req, resp, next) => {
                         })
                     }
                     if (result) {
+                        const token = jwt.sign({
+                            email: user[0].email,
+                            user_id: user[0]._id
+                        }, process.env.JWT_KEY, {
+                            expiresIn: "1h"
+                        })
                         resp.status(201).json({
                             message: `Login Successfull`,
+                            token: token    
                         })
                     }
                     else {

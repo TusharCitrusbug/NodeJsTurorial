@@ -1,3 +1,5 @@
+// importing auth middleware
+const checkAuth = require('../middleware/check_auth')
 const express = require('express')
 const mongoose = require('mongoose')
 require('dotenv').config();
@@ -92,7 +94,7 @@ router.get('/', (req, resp, next) => {
                     name: doc.name,
                     price: doc.price,
                     _id: doc._id,
-                    product_image:doc.product_image,
+                    product_image: doc.product_image,
                     request: {
                         type: 'GET',
                         url: `http://${process.env.PROJECT_HOST}:${process.env.PROJECT_PORT}/products/${doc._id}`
@@ -132,7 +134,7 @@ router.get('/', (req, resp, next) => {
  *          404:
  *              description: Something went wrong.
  */
-router.post('/', upload.single('product_image'), (req, resp, next) => {
+router.post('/', checkAuth, upload.single('product_image'), (req, resp, next) => {
     if (!req.file) {
         resp.status(404).json({
             error: "Uploaded file should not be empty or sould be with required mimetype jpg/png.",
