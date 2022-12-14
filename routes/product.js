@@ -24,6 +24,18 @@ const router = express.Router();
  *              id : 6399595439ea2bddb8ab5965
  *              name: product name
  *              price: 78888
+ *      ApiResponse:
+ *          type: object
+ *          properties:
+ *              code:
+ *                  type: integer
+ *                  format: int32
+ *              type:
+ *                  type: string
+ *              message:
+ *                  type: string
+ *          xml:
+ *              name: '##default'
 */
 
 
@@ -66,17 +78,18 @@ router.get('/', (req, resp, next) => {
  *      summery: Create a new product.
  *      tags: [Products]
  *      requestBody:
- *            content:
- *              application/json:
- *                  schema:
- *                      $ref: '#/components/schemas/Products'
+ *       required: true
+ *       content:
+ *          application/json:
+ *             schema:
+ *                 $ref: '#/components/schemas/Products'
  *      responses: 
  *          200:
- *              description: The product os successfully created..
+ *              description: successful operation
  *              content:
  *                  application/json:
  *                      schema:
- *                          $ref: '#/components/schemas/Products'
+ *                          $ref: '#/components/schemas/ApiResponse'
  *          404:
  *              description: Something went wrong.
  */

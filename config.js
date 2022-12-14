@@ -1,3 +1,3 @@
 module.exports = { 
-    ENABLE_SWAGGER:false
+    ENABLE_SWAGGER:true
 }

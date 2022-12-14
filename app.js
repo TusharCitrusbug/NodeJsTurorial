@@ -25,7 +25,7 @@ app.use((req, resp, next) => {
 
 const ENABLE_SWAGGER = config.ENABLE_SWAGGER
 
-console.log(ENABLE_SWAGGER);
+
 if (ENABLE_SWAGGER) {
     const swaggerUi = require("swagger-ui-express");
     const swagerJSDoc = require("swagger-jsdoc");
