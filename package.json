@@ -29,6 +29,7 @@
     "express-validator": "^6.14.2",
     "mongoose": "^6.8.0",
     "morgan": "^1.10.0",
+    "multer": "^1.4.5-lts.1",
     "nodemon": "^2.0.20",
     "postman-request": "^2.88.1-postman.31",
     "swagger-jsdoc": "^6.2.5",

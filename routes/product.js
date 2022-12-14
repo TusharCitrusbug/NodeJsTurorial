@@ -1,8 +1,32 @@
 const express = require('express')
 const mongoose = require('mongoose')
-
+require('dotenv').config();
 const Product = require('../models/product');
 const router = express.Router();
+const multer = require('multer');
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, './media/');
+    },
+    filename: (req, file, cb) => {
+        cb(null, new Date().toISOString() + file.originalname);
+    }
+})
+
+const fileFilter = (req, file, cb) => {
+    // reject file
+    if (file.mimetype === 'image/jpeg' || file.mimetype === 'image/png') {
+        cb(null, true);
+    } else {
+        cb(null, false);
+    }
+}
+
+const upload = multer({
+    storage: storage, limits: {
+        fieldSize: 1024 * 1024 * 5
+    }, fileFilter: fileFilter
+})
 
 /**
  * @swagger
@@ -57,11 +81,23 @@ const router = express.Router();
  *                              $ref: '#/components/schemas/Products'
  */
 router.get('/', (req, resp, next) => {
-    Product.find().exec().then(result => {
-        resp.status(200).json({
-            message: "Handling GET requests to /products",
-            products: result
-        })
+    Product.find().select('name price _id product_image').exec().then(result => {
+        const response = {
+            count: result.length,
+            products: result.map(doc => {
+                return {
+                    name: doc.name,
+                    price: doc.price,
+                    _id: doc._id,
+                    product_image:doc.product_image,
+                    request: {
+                        type: 'GET',
+                        url: `http://${process.env.PROJECT_HOST}:${process.env.PROJECT_PORT}/products/${doc._id}`
+                    }
+                }
+            })
+        };
+        resp.status(200).json(response)
     }).catch(error => {
         resp.status(400).json({
             message: "Something went wrong !",
@@ -93,23 +129,43 @@ router.get('/', (req, resp, next) => {
  *          404:
  *              description: Something went wrong.
  */
-router.post('/', (req, resp, next) => {
+router.post('/', upload.single('product_image'), (req, resp, next) => {
+    if (!req.file) {
+        resp.status(404).json({
+            error: "Uploaded file should not be empty or sould be with required mimetype jpg/png.",
+        })
+    }
     // ading the product into the model
     const product = new Product({
         _id: new mongoose.Types.ObjectId(),
         name: req.body.name,
-        price: req.body.price
+        price: req.body.price,
+        product_image: req.file.path
     });
 
     product.save().then(result => {
         console.log("success");
+        resp.status(200).json({
+            message: "Handling POST requests to /products",
+            createdProduct: {
+                name: result.name,
+                price: result.price,
+                _id: result._id,
+                product_image: req.file.path,
+                request: {
+                    type: 'GET',
+                    url: `http://${process.env.PROJECT_HOST}:${process.env.PROJECT_PORT}/products/${result._id}`
+
+                }
+            }
+        })
     }).catch(err => {
         console.log(err, "error");
+        resp.status(404).json({
+            message: "Something went wrong !",
+            error: err
+        })
     });
-    resp.status(404).json({
-        message: "Handling POST requests to /products",
-        createdProduct: product
-    })
 })
 
 
@@ -144,7 +200,7 @@ router.get('/:product_id', (req, resp, next) => {
     Product.findById(id).exec().then(result => {
         console.log("success");
         resp.status(200).json({
-            message: `Congrats you have entered id -> ${id} correctly!`,
+            message: `You got your product for id ${id} successfully!`,
             data: result
         })
     }).catch(err => {

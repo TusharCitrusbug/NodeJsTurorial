@@ -6,6 +6,7 @@ const productRoutes = require('./routes/product')
 const orderRoutes = require('./routes/orders')
 const config = require('./config')
 app.use(morgan('dev'))
+app.use(express.static('media'))
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
