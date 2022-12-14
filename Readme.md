@@ -103,3 +103,9 @@
 # Creating a product orders api
 
     - https://www.youtube.com/playlist?list=PL55RiY5tL51q4D-B63KBnygU6opNPFk_q
+
+# Implimenting swagger in my API.
+
+    - https://www.youtube.com/watch?v=S8kmHtQeflo
+
+    ! ********** NOT PROPERLY DONE ***********

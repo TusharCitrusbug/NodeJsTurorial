@@ -2,10 +2,9 @@ const express = require('express');
 const morgan = require('morgan')
 const bodyParser = require('body-parser')
 const app = express();
-
 const productRoutes = require('./routes/product')
 const orderRoutes = require('./routes/orders')
-
+const config = require('./config')
 app.use(morgan('dev'))
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
@@ -24,17 +23,33 @@ app.use((req, resp, next) => {
     next();
 });
 
+const ENABLE_SWAGGER = config.ENABLE_SWAGGER
 
+console.log(ENABLE_SWAGGER);
+if (ENABLE_SWAGGER) {
+    const swaggerUi = require("swagger-ui-express");
+    const swagerJSDoc = require("swagger-jsdoc");
+    const options = {
+        definition: {
+            openapi: '3.0.0',
+            info: {
+                title: 'Product Api',
+                version: '1.0.0',
+            },
+            servers: [{
+                url: 'http://localhost:8000/'
+            }]
+        },
+        apis: ['./routes/*.js'],
 
-// swagger adding into api
-
-const swaggerUi = require("swagger-ui-express");
-const swaggerDocument = require("./swagger.json");
-app.use(
-    '/api-docs',
-    swaggerUi.serve,
-    swaggerUi.setup(swaggerDocument)
-);
+    };
+    const openapiSpecification = swagerJSDoc(options);
+    app.use(
+        '/',
+        swaggerUi.serve,
+        swaggerUi.setup(openapiSpecification)
+    );
+}
 
 app.use('/products', productRoutes)
 app.use('/orders', orderRoutes)
