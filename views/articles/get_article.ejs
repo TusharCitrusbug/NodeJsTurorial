@@ -18,20 +18,23 @@
 
     <div class="container">
         <h1 class="mb-4">Blog Articles</h1>
-            <div class="card">
-                <div class="card-body">
-                    <h4 class="card-title">
-                        <%= article.title %>
-                    </h4>
-                    <div class="card-subtitle text-muted mb-2">
-                        <%= article.created_at %>
-                    </div>
-                    <div class="card-text mb-2">
-                        <%= article.description %>
-                    </div>
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">
+                    <%= article.title %>
+                </h4>
+                <div class="card-subtitle text-muted mb-2">
+                    <%= article.created_at %>
+                </div>
+                <div class="card-text mb-2">
+                    <%= article.description %>
                 </div>
             </div>
-           
+            <a href="/articles" class="btn btn-secondary">Show All</a>
+            <a href="/articles/update/<%= article.slug %>" class="btn btn-primary">Edit</a>
+            <a href="/articles/delete/<%= article.slug %>" class="btn btn-danger">Delete</a>
+        </div>
+
     </div>
 </body>
 

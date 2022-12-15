@@ -105,3 +105,9 @@
         Application level middleware
             - apply with app.use() on entire application
 
+ 
+# Blog Application with CRUD operation
+
+    - Connected mongodb with mongoose and created Schema for blog with validations.
+    - Created routes for listing and creating Blogs.
+    - Created route for watch single blog and.

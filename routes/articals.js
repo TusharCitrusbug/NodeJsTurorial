@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const Article = require('../models/article');
 const mongoose = require('mongoose');
+const slugify = require('slugify')
 
 router.get('/', (req, resp,) => {
 
@@ -12,14 +13,13 @@ router.get('/', (req, resp,) => {
     })
 })
 
-router.get('/article/:blog_id', (req, resp,) => {
-    const id = req.params.blog_id;
-    Article.findById(id).exec().then(result => {
-
+router.get('/article/:slug', (req, resp,) => {
+    const slug = req.params.slug;
+    Article.findOne({ slug: slug }).exec().then(result => {
+        resp.render('articles/get_article', { article: result })
     }).catch(error => {
-
+        resp.render('articles', { error: error })
     })
-    resp.send(`articlekdfkljfksjdfk with id ${id}`)
 })
 
 router.get('/new', (req, resp,) => {
@@ -33,13 +33,24 @@ router.post('/create', (req, resp,) => {
         title: req.body.title,
         description: req.body.description,
         markdown: req.body.markdown,
+        slug: slugify(req.body.title, { lower: true, strict: true })
     });
     article.save().then(result => {
-        resp.redirect(`/articles/article/${result._id}`)
+        resp.redirect(`/articles/article/${result.slug}`)
     }).catch(error => {
+        console.log(error);
         resp.render('articles/new', { article: article, error: error })
     })
 
+})
+
+router.post('/update/:blog_id', (req, resp,) => {
+    resp.send("updateeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee")
+})
+
+
+router.delete('/delete/:blog_id', (req, resp,) => {
+    resp.send("deleteeeeeeeeeeeeeeeeeeeeeeeeeee")
 })
 
 module.exports = router
