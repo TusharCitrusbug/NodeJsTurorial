@@ -69,10 +69,16 @@
 *********************Topics of express js*********************
 
     - Routing and HTTP Methods
+        - get,put,post,patch,delete methods
+        - routing using express.Route method.
     - Middleware
         - Globle level Middleware
         - single route level Middleware
-    - Cookies
+    - Cookies(cookie-parser module)
+         - set-cookie
+         - get-cookie
+         - remove a perticular cookie
+
     - Scaffolding
     - Database Connectivity (MONGO DB)
     - Templating EJS
@@ -98,3 +104,4 @@
             
         Application level middleware
             - apply with app.use() on entire application
+
