@@ -75,11 +75,15 @@
     - Cookies
     - Scaffolding
     - Database Connectivity (MONGO DB)
+        - Using mongoose
     - Templating EJS
     - SERVING STATIC FILES
     - FORM DATA handling
     - AUTHENTICATION
+        - Authentication basesd on token (for api)
+        - Authentication based on session (not for api)
     - Error Handling
+        - With then().catch()
     - REST API
 
 
