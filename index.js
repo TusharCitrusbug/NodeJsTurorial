@@ -21,13 +21,14 @@ const environ = require('./environ')
 
 const app = express();
 
+const cookie_parser = require('cookie-parser');
 const statis_path = environ.path.static_path
 // app.use(express.static(environ.path.static_path))
-app.set('view engine','ejs');
-app.use(express.urlencoded({extended:false}))
+app.set('view engine', 'ejs');
+app.use(express.urlencoded({ extended: false }))
 
 // custom middle ware in express
-const customMiddleWear = (req,resp,next)=>{
+const customMiddleWear = (req, resp, next) => {
     next();
     // if (req.body.fname && req.body.fname) {
     //     next();  
@@ -36,6 +37,8 @@ const customMiddleWear = (req,resp,next)=>{
     // }
 }
 app.use(customMiddleWear)
+app.use(cookie_parser())
+
 // app.get('', (req, resp) => {
 //     resp.sendFile(`${statis_path}/index.html`)
 // })
@@ -53,19 +56,35 @@ app.post('/home', (req, resp) => {
 })
 app.get('/about', (req, resp) => {
     let data = {
-        tushar:"lsjkdlskd",
-        rahul:"kdfjkdfjdkf",
-        ratan:"xmcnxmcnxmc",
-        manan:"smdskjdksjdskdjsd",
-        subjects:["skdd",'s',12,5,9,"kjdskjsdk"]
+        tushar: "lsjkdlskd",
+        rahul: "kdfjkdfjdkf",
+        ratan: "xmcnxmcnxmc",
+        manan: "smdskjdksjdskdjsd",
+        subjects: ["skdd", 's', 12, 5, 9, "kjdskjsdk"]
     }
-    resp.render('users/about',{data})
+    resp.render('users/about', { data })
 })
 
 // render direct html file
 // app.get('*', (req, resp) => {
 //     resp.sendFile(`${statis_path}/404.html`)
 // })
+
+// Cookies in node/express js
+app.get('/set-cookies', (req, resp) => {
+    resp.cookie('foo','bar')
+    resp.send("cookie is set");
+
+})
+app.get('/get-cookies', (req, resp) => {
+    console.log(req.cookies);
+    resp.send(req.cookies);
+})
+app.get('/remove-cookies', (req, resp) => {
+    resp.clearCookie("foo")
+    resp.send(req.cookies);
+})
+
 
 app.get('*', (req, resp) => {
     resp.render('404')
