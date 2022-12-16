@@ -3,6 +3,7 @@ const marked = require('marked');
 const slugify = require('slugify')
 const createDomPurifier = require('dompurify');
 const { JSDOM } = require('jsdom')
+const dompurify = createDomPurifier(new JSDOM().window)
 const articleSchema = new mongoose.Schema({
     _id: mongoose.Schema.Types.ObjectId,
     title: {
@@ -26,6 +27,10 @@ const articleSchema = new mongoose.Schema({
         required: true,
         unique: true,
         type: String
+    },
+    sanatizedHtml: {
+        type: String,
+        required: true
     }
 })
 
@@ -33,6 +38,9 @@ articleSchema.pre('validate', (next) => {
     if (this.title) {
         console.log("here------------------------------------------");
         this.slug = slugify(this.title, { lower: true, strict: true })
+    }
+    if (this.markdown) {
+        this.sanatizedHtml = dompurify.sanitize(marked(this.markdown));
     }
     next();
 })
