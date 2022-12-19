@@ -105,3 +105,11 @@
         Application level middleware
             - apply with app.use() on entire application
 
+
+********************* Learning async in js with demo project ***************
+
+    - Understanding call stack,call back queue,event loop and node api flow.
+    - Created an account in weather api and get the credentials.
+    - Call- back functions
+    - Request without any third party module direct using https module
+    

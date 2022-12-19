@@ -1,92 +1,83 @@
-// const data = require('./data')
-// const http = require('node:http');
-// const port = 8000;
-// const hostname = 'localhost';
+// console.log("starting");
 
-// const server = http.createServer((req, res) => {
-//     res.statusCode = 200;
-//     res.setHeader('Content-Type', 'application/json');
-//     res.write(JSON.stringify(data.data));
-//     res.end()
-// });
+// setTimeout(() => {
+//     console.log("2 sec timer");
+// }, 2000);
 
-// server.listen(port, hostname, () => {
-//     console.log(`Server running at http://${hostname}:${port}/`);
-// });
+// setTimeout(() => {
+//     console.log("0 sec timer");
+
+// }, 0);
+// console.log("stopping");
+
+// require('dotenv').config();
+
+// const request = require('postman-request');
+
+// const url = `http://api.weatherstack.com/current?access_key=${process.env.API_KEY}&query=23.022505,72.571365&units=m`
 
 
-const express = require('express')
+// request({ url: url }, (error,response) => {
+//     const  data = JSON.parse(response.body)
+//     console.log(data.current);
+// })
 
-const environ = require('./environ')
+// const geocode = require('./utils/geocode')
+// const forecast = require('./utils/forecast')
 
-const app = express();
+// geocode('Boston', (error, data) => {
+//     console.log('Error', error)
+//     console.log('Data', data)
+// })
 
-const cookie_parser = require('cookie-parser');
-const statis_path = environ.path.static_path
-// app.use(express.static(environ.path.static_path))
-app.set('view engine', 'ejs');
-app.use(express.urlencoded({ extended: false }))
-
-// custom middle ware in express
-const customMiddleWear = (req, resp, next) => {
-    next();
-    // if (req.body.fname && req.body.fname) {
-    //     next();  
-    // }else{
-    //     resp.render('404')
-    // }
-}
-app.use(customMiddleWear)
-app.use(cookie_parser())
-
-// app.get('', (req, resp) => {
-//     resp.sendFile(`${statis_path}/index.html`)
+// forecast(44.1545, -75.7088, (error, data) => {
+//     console.log('Error', error)
+//     console.log('Data', data)
 // })
 
 
-// render direct with ejs
-
-app.get('', (req, resp) => {
-    resp.render('index')
-})
-
-app.post('/home', (req, resp) => {
-    console.log(req.body);
-    resp.redirect('/')
-})
-app.get('/about', (req, resp) => {
-    let data = {
-        tushar: "lsjkdlskd",
-        rahul: "kdfjkdfjdkf",
-        ratan: "xmcnxmcnxmc",
-        manan: "smdskjdksjdskdjsd",
-        subjects: ["skdd", 's', 12, 5, 9, "kjdskjsdk"]
-    }
-    resp.render('users/about', { data })
-})
-
-// render direct html file
-// app.get('*', (req, resp) => {
-//     resp.sendFile(`${statis_path}/404.html`)
-// })
-
-// Cookies in node/express js
-app.get('/set-cookies', (req, resp) => {
-    resp.cookie('foo','bar')
-    resp.send("cookie is set");
-
-})
-app.get('/get-cookies', (req, resp) => {
-    console.log(req.cookies);
-    resp.send(req.cookies);
-})
-app.get('/remove-cookies', (req, resp) => {
-    resp.clearCookie("foo")
-    resp.send(req.cookies);
-})
 
 
-app.get('*', (req, resp) => {
-    resp.render('404')
+// objects destructuring
+
+// const user = {
+//     name: "tushar",
+//     age: '33'
+// }
+
+
+// console.log(user);
+
+
+// const product = {
+//     label: "samsung",
+//     price: 3,
+//     stock: 7,
+//     salePrice: 888
+// }
+
+// const { label: productLable, price, stock, salePrice } = product
+
+// console.log(productLable);
+
+// const transaction = (type, { label, price, stock }) => {
+//     console.log(`${type}, ${label}, ${price}, ${stock}`);
+// }
+
+// transaction('myType',product)
+
+const https = require('https')
+
+const url = `https://api.weatherstack.com/current?access_key=${process.env.API_KEY}&query=23.022505,72.571365&units=m`
+
+const request = https.request(url, (response) => {
+    let data = ''
+    response.on('data', (chunk) => {
+        data = chunk.toString()
+    })
+
+    response.on('end', () => {
+        console.log(data);
+    })
 })
-app.listen(8000);
+request.end();
