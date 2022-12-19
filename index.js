@@ -1,92 +1,103 @@
-// const data = require('./data')
-// const http = require('node:http');
-// const port = 8000;
-// const hostname = 'localhost';
-
-// const server = http.createServer((req, res) => {
-//     res.statusCode = 200;
-//     res.setHeader('Content-Type', 'application/json');
-//     res.write(JSON.stringify(data.data));
-//     res.end()
-// });
-
-// server.listen(port, hostname, () => {
-//     console.log(`Server running at http://${hostname}:${port}/`);
-// });
-
-
+const path = require('path')
 const express = require('express')
+const hbs = require('hbs')
+const geocode = require('./utils/geocode')
+const forecast = require('./utils/forecast')
+const app = express()
 
-const environ = require('./environ')
+// Define paths for Express config
+const publicDirectoryPath = path.join(__dirname, './public')
+const viewsPath = path.join(__dirname, './templates/views')
+const partialsPath = path.join(__dirname, './templates/partials')
 
-const app = express();
+// Setup handlebars engine and views location
+app.set('view engine', 'hbs')
+app.set('views', viewsPath)
+hbs.registerPartials(partialsPath)
 
-const cookie_parser = require('cookie-parser');
-const statis_path = environ.path.static_path
-// app.use(express.static(environ.path.static_path))
-app.set('view engine', 'ejs');
-app.use(express.urlencoded({ extended: false }))
+// Setup static directory to serve
+app.use(express.static(publicDirectoryPath))
 
-// custom middle ware in express
-const customMiddleWear = (req, resp, next) => {
-    next();
-    // if (req.body.fname && req.body.fname) {
-    //     next();  
-    // }else{
-    //     resp.render('404')
-    // }
-}
-app.use(customMiddleWear)
-app.use(cookie_parser())
-
-// app.get('', (req, resp) => {
-//     resp.sendFile(`${statis_path}/index.html`)
-// })
-
-
-// render direct with ejs
-
-app.get('', (req, resp) => {
-    resp.render('index')
+app.get('', (req, res) => {
+    res.render('index', {
+        title: 'Weather',
+        name: 'Andrew Mead'
+    })
 })
 
-app.post('/home', (req, resp) => {
-    console.log(req.body);
-    resp.redirect('/')
+app.get('/about', (req, res) => {
+    res.render('about', {
+        title: 'About Me',
+        name: 'Andrew Mead'
+    })
 })
-app.get('/about', (req, resp) => {
-    let data = {
-        tushar: "lsjkdlskd",
-        rahul: "kdfjkdfjdkf",
-        ratan: "xmcnxmcnxmc",
-        manan: "smdskjdksjdskdjsd",
-        subjects: ["skdd", 's', 12, 5, 9, "kjdskjsdk"]
+
+app.get('/help', (req, res) => {
+    res.render('help', {
+        helpText: 'This is some helpful text.',
+        title: 'Help',
+        name: 'Andrew Mead'
+    })
+})
+
+app.get('/weather', (req, res) => {
+    if (!req.query.latitude) {
+        return res.send({
+            error: 'You must provide an latitude!'
+        })
     }
-    resp.render('users/about', { data })
+
+    if (!req.query.longitude) {
+        return res.send({
+            error: 'You must provide an longitude!'
+        })
+    }
+        let latitude = req.query.latitude;
+        let longitude = req.query.latitude;
+
+        forecast(latitude, longitude, (error, forecastData) => {
+            if (error) {
+                return res.send({ error })
+            }
+
+            res.send({
+                forecast: forecastData,
+                location,
+                address: req.query.address
+            })
+        })
+    })
+
+
+app.get('/products', (req, res) => {
+    if (!req.query.search) {
+        return res.send({
+            error: 'You must provide a search term'
+        })
+    }
+
+    console.log(req.query.search)
+    res.send({
+        products: []
+    })
 })
 
-// render direct html file
-// app.get('*', (req, resp) => {
-//     resp.sendFile(`${statis_path}/404.html`)
-// })
-
-// Cookies in node/express js
-app.get('/set-cookies', (req, resp) => {
-    resp.cookie('foo','bar')
-    resp.send("cookie is set");
-
-})
-app.get('/get-cookies', (req, resp) => {
-    console.log(req.cookies);
-    resp.send(req.cookies);
-})
-app.get('/remove-cookies', (req, resp) => {
-    resp.clearCookie("foo")
-    resp.send(req.cookies);
+app.get('/help/*', (req, res) => {
+    res.render('404', {
+        title: '404',
+        name: 'Andrew Mead',
+        errorMessage: 'Help article not found.'
+    })
 })
 
-
-app.get('*', (req, resp) => {
-    resp.render('404')
+app.get('*', (req, res) => {
+    res.render('404', {
+        title: '404',
+        name: 'Andrew Mead',
+        errorMessage: 'Page not found.'
+    })
 })
-app.listen(8000);
+
+app.listen(3000, () => {
+    console.log('Server is up on port 3000.')
+})

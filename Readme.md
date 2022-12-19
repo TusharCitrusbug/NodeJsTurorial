@@ -105,3 +105,10 @@
         Application level middleware
             - apply with app.use() on entire application
 
+
+********************* Creating a weather app with static templates ***************
+
+    - used express js.
+    - hbs module to serve static files.
+    - path register for templates and partials and static files
+    
