@@ -105,3 +105,6 @@
         Application level middleware
             - apply with app.use() on entire application
 
+********************* Mongo db with promises and a task app ***************
+
+    
