@@ -1,92 +1,71 @@
-// const data = require('./data')
-// const http = require('node:http');
-// const port = 8000;
-// const hostname = 'localhost';
+const yargs = require('yargs')
+const notes = require('./notes.js')
 
-// const server = http.createServer((req, res) => {
-//     res.statusCode = 200;
-//     res.setHeader('Content-Type', 'application/json');
-//     res.write(JSON.stringify(data.data));
-//     res.end()
-// });
+// Customize yargs version
+yargs.version('1.1.0')
 
-// server.listen(port, hostname, () => {
-//     console.log(`Server running at http://${hostname}:${port}/`);
-// });
-
-
-const express = require('express')
-
-const environ = require('./environ')
-
-const app = express();
-
-const cookie_parser = require('cookie-parser');
-const statis_path = environ.path.static_path
-// app.use(express.static(environ.path.static_path))
-app.set('view engine', 'ejs');
-app.use(express.urlencoded({ extended: false }))
-
-// custom middle ware in express
-const customMiddleWear = (req, resp, next) => {
-    next();
-    // if (req.body.fname && req.body.fname) {
-    //     next();  
-    // }else{
-    //     resp.render('404')
-    // }
-}
-app.use(customMiddleWear)
-app.use(cookie_parser())
-
-// app.get('', (req, resp) => {
-//     resp.sendFile(`${statis_path}/index.html`)
-// })
-
-
-// render direct with ejs
-
-app.get('', (req, resp) => {
-    resp.render('index')
-})
-
-app.post('/home', (req, resp) => {
-    console.log(req.body);
-    resp.redirect('/')
-})
-app.get('/about', (req, resp) => {
-    let data = {
-        tushar: "lsjkdlskd",
-        rahul: "kdfjkdfjdkf",
-        ratan: "xmcnxmcnxmc",
-        manan: "smdskjdksjdskdjsd",
-        subjects: ["skdd", 's', 12, 5, 9, "kjdskjsdk"]
+// Create add command
+yargs.command({
+    command: 'add',
+    describe: 'Add a new note',
+    builder: {
+        title: {
+            describe: 'Note title',
+            demandOption: true,
+            type: 'string'
+        },
+        body: {
+            describe: 'Note body',
+            demandOption: true,
+            type: 'string'
+        }
+    },
+    handler: (argv) => {
+        notes.addNote(argv.title, argv.body)
     }
-    resp.render('users/about', { data })
 })
 
-// render direct html file
-// app.get('*', (req, resp) => {
-//     resp.sendFile(`${statis_path}/404.html`)
-// })
-
-// Cookies in node/express js
-app.get('/set-cookies', (req, resp) => {
-    resp.cookie('foo','bar')
-    resp.send("cookie is set");
-
-})
-app.get('/get-cookies', (req, resp) => {
-    console.log(req.cookies);
-    resp.send(req.cookies);
-})
-app.get('/remove-cookies', (req, resp) => {
-    resp.clearCookie("foo")
-    resp.send(req.cookies);
+// Create remove command
+yargs.command({
+    command: 'remove',
+    describe: 'Remove a note',
+    builder: {
+        title: {
+            describe: 'Note title',
+            demandOption: true,
+            type: 'string'
+        },
+    },
+    handler: (argv) => {
+        console.log('Removing the note')
+        notes.removeNote(argv.title)
+    }
 })
 
-
-app.get('*', (req, resp) => {
-    resp.render('404')
+// Create list command
+yargs.command({
+    command: 'list',
+    describe: 'List your notes',
+    handler: () => {
+        notes.listNotes()
+    }
 })
-app.listen(8000);
+
+// Create read command
+yargs.command({
+    command: 'read',
+    describe: 'Read a note',
+    builder: {
+        title: {
+            describe: 'Note title',
+            demandOption: true,
+            type: 'string'
+        },
+    },
+    handler: (argv) => {
+        console.log('Reading a note')
+        notes.getNotes(argv.title);
+    }
+})
+
+yargs.parse()

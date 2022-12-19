@@ -105,3 +105,10 @@
         Application level middleware
             - apply with app.use() on entire application
 
+
+
+******************* Learning file utilities *******************
+
+    - Command line arguments with file system.
+    - yargs module to get command line args
+    - Created a notes crud operation using yargs and created json file with appending data.
