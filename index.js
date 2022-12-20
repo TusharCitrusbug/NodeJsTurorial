@@ -43,13 +43,13 @@ app.get('/help', (req, res) => {
 app.get('/weather', (req, res) => {
     if (!req.query.latitude) {
         return res.send({
-            error: 'You must provide an latitude!'
+            error: 'You must provide a latitude!'
         })
     }
 
     if (!req.query.longitude) {
         return res.send({
-            error: 'You must provide an longitude!'
+            error: 'You must provide a longitude!'
         })
     }
         let latitude = req.query.latitude;
@@ -62,8 +62,6 @@ app.get('/weather', (req, res) => {
 
             res.send({
                 forecast: forecastData,
-                location,
-                address: req.query.address
             })
         })
     })
