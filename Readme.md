@@ -109,3 +109,5 @@
 
     - Set-up mongoose and creating a model.
     - Data validation and data senetization.
+    - Created two models tasks and users.
+    - Created endpoints for create and read for tasks and users.
