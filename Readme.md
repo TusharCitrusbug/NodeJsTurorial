@@ -111,3 +111,4 @@
     - Data validation and data senetization.
     - Created two models tasks and users.
     - Created endpoints for create and read for tasks and users.
+    - implimented async await request in all end-points.
