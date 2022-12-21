@@ -105,3 +105,7 @@
         Application level middleware
             - apply with app.use() on entire application
 
+********************* Task manager app with mongoose ***************
+
+    - Set-up mongoose and creating a model.
+    - Data validation and data senetization.

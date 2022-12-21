@@ -1,92 +1,66 @@
-// const data = require('./data')
-// const http = require('node:http');
-// const port = 8000;
-// const hostname = 'localhost';
+const mongoose = require('mongoose')
+const validator = require('validator')
 
-// const server = http.createServer((req, res) => {
-//     res.statusCode = 200;
-//     res.setHeader('Content-Type', 'application/json');
-//     res.write(JSON.stringify(data.data));
-//     res.end()
-// });
+mongoose.connect('mongodb://127.0.0.1:27017/task-manager-api', {
+    useNewUrlParser: true,
+    useCreateIndex: true
+})
 
-// server.listen(port, hostname, () => {
-//     console.log(`Server running at http://${hostname}:${port}/`);
-// });
-
-
-const express = require('express')
-
-const environ = require('./environ')
-
-const app = express();
-
-const cookie_parser = require('cookie-parser');
-const statis_path = environ.path.static_path
-// app.use(express.static(environ.path.static_path))
-app.set('view engine', 'ejs');
-app.use(express.urlencoded({ extended: false }))
-
-// custom middle ware in express
-const customMiddleWear = (req, resp, next) => {
-    next();
-    // if (req.body.fname && req.body.fname) {
-    //     next();  
-    // }else{
-    //     resp.render('404')
-    // }
-}
-app.use(customMiddleWear)
-app.use(cookie_parser())
-
-// app.get('', (req, resp) => {
-//     resp.sendFile(`${statis_path}/index.html`)
+// const User = mongoose.model('User', {
+//     name: {
+//         type: String,
+//         required: true,
+//         trim: true,
+//     },
+//     email: {
+//         type: String,
+//         required: true,
+//         trim: true,
+//         lowercase: true,
+//         validate(value) {
+//             if (!validator.isEmail(value)) {
+//                 throw new Error('Email is invalid')
+//             }
+//         }
+//     },
+//     age: {
+//         type: Number,
+//         default: 0,
+//         validate(value) {
+//             if (value < 0) {
+//                 throw new Error('Age must be a postive number')
+//             }
+//         }
+//     }
 // })
 
-
-// render direct with ejs
-
-app.get('', (req, resp) => {
-    resp.render('index')
-})
-
-app.post('/home', (req, resp) => {
-    console.log(req.body);
-    resp.redirect('/')
-})
-app.get('/about', (req, resp) => {
-    let data = {
-        tushar: "lsjkdlskd",
-        rahul: "kdfjkdfjdkf",
-        ratan: "xmcnxmcnxmc",
-        manan: "smdskjdksjdskdjsd",
-        subjects: ["skdd", 's', 12, 5, 9, "kjdskjsdk"]
-    }
-    resp.render('users/about', { data })
-})
-
-// render direct html file
-// app.get('*', (req, resp) => {
-//     resp.sendFile(`${statis_path}/404.html`)
+// const me = new User({
+//     name: '   Andrew  ',
+//     email: 'MYEMAIL@MEAD.IO   '
 // })
 
-// Cookies in node/express js
-app.get('/set-cookies', (req, resp) => {
-    resp.cookie('foo','bar')
-    resp.send("cookie is set");
+// me.save().then(() => {
+//     console.log(me)
+// }).catch((error) => {
+//     console.log('Error!', error)
+// })
 
-})
-app.get('/get-cookies', (req, resp) => {
-    console.log(req.cookies);
-    resp.send(req.cookies);
-})
-app.get('/remove-cookies', (req, resp) => {
-    resp.clearCookie("foo")
-    resp.send(req.cookies);
-})
+// const Task = mongoose.model('Task', {
+//     description: {
+//         type: String
+//     },
+//     completed: {
+//         type: Boolean
+//     }
+// })
 
+// const task = new Task({
+//     description: 'Learn the Mongoose library',
+//     completed: false
+// })
 
-app.get('*', (req, resp) => {
-    resp.render('404')
-})
-app.listen(8000);
+// task.save().then(() => {
+//     console.log(task)
+// }).catch((error) => {
+//     console.log(error)
+// })
