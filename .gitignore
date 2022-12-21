@@ -2,3 +2,4 @@
 .env
 /env
 git_exe
+git_push.sh
