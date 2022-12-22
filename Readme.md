@@ -111,4 +111,7 @@
     - Data validation and data senetization.
     - Created two models tasks and users.
     - Created endpoints for create and read for tasks and users.
+    - Update and delete end-points created for tasks and users.
     - implimented async await request in all end-points.
+    - Seperated routes from index file to another folder.
+    - Seperated controllers to another folder and enbaded it to the routes.
