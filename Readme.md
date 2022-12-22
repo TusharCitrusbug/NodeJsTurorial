@@ -115,3 +115,5 @@
     - implimented async await request in all end-points.
     - Seperated routes from index file to another folder.
     - Seperated controllers to another folder and enbaded it to the routes.
+    - Added a middle wear to encrypt password in model of user.
+    - Password encryption and login user with bcrypt.

@@ -17,4 +17,6 @@ router.patch('/users/:id', controllers.patch_user)
 // delete user
 router.delete('/users/:id', controllers.delete_user)
 
+router.post('/users/login', controllers.login_user)
+
 module.exports = router

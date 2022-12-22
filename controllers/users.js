@@ -69,3 +69,13 @@ exports.delete_user = async (req, res) => {
         res.status(500).send(e)
     }
 }
+
+
+exports.login_user = async (req, res) => {
+    try {
+        const user = await User.findByCredentials(req.body.email, req.body.password)
+        res.send(user)
+    } catch (e) {
+        res.status(400).send("Something went wrong incorrect email or password please try again !")
+    }
+}
