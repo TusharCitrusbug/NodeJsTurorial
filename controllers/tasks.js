@@ -1,4 +1,6 @@
-const create_task = async (req, res) => {
+const Task = require('../models/tasks')
+
+exports.create_task = async (req, res) => {
     const task = new Task(req.body)
 
     try {
@@ -10,7 +12,7 @@ const create_task = async (req, res) => {
 }
 
 
-const list_users = async (req, res) => {
+exports.list_tasks = async (req, res) => {
     try {
         const tasks = await Task.find({})
         res.send(tasks)
@@ -21,7 +23,7 @@ const list_users = async (req, res) => {
 
 
 
-const user_get_by_id = async (req, res) => {
+exports.task_get_by_id = async (req, res) => {
     const _id = req.params.id
 
     try {
@@ -38,7 +40,7 @@ const user_get_by_id = async (req, res) => {
 }
 
 
-const patch_user = async (req, res) => {
+exports.patch_task = async (req, res) => {
     const updates = Object.keys(req.body)
     const allowedUpdates = ['description', 'completed']
     const isValidOperation = updates.every((update) => allowedUpdates.includes(update))
@@ -61,7 +63,7 @@ const patch_user = async (req, res) => {
 
 
 
-const delete_user = async (req, res) => {
+exports.delete_task = async (req, res) => {
     try {
         const task = await Task.findByIdAndDelete(req.params.id)
 

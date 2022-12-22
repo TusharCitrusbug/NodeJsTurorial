@@ -1,4 +1,6 @@
-const create_user = async (req, res) => {
+const User = require('../models/users')
+
+exports.create_user = async (req, res) => {
     const user = new User(req.body)
 
     try {
@@ -8,7 +10,7 @@ const create_user = async (req, res) => {
         res.status(400).send(e)
     }
 }
-const list_user = async (req, res) => {
+exports.list_user = async (req, res) => {
     try {
         const users = await User.find({})
         res.send(users)
@@ -16,7 +18,7 @@ const list_user = async (req, res) => {
         res.status(500).send()
     }
 }
-const get_user_by_id = async (req, res) => {
+exports.get_user_by_id = async (req, res) => {
     const _id = req.params.id
 
     try {
@@ -32,7 +34,7 @@ const get_user_by_id = async (req, res) => {
     }
 }
 
-const patch_user = async (req, res) => {
+exports.patch_user = async (req, res) => {
     const updates = Object.keys(req.body)
     const allowedUpdates = ['name', 'email', 'password', 'age']
     const isValidOperation = updates.every((update) => allowedUpdates.includes(update))
@@ -54,7 +56,7 @@ const patch_user = async (req, res) => {
     }
 }
 
-const delete_user = async (req, res) => {
+exports.delete_user = async (req, res) => {
     try {
         const user = await User.findByIdAndDelete(req.params.id)
 
