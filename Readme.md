@@ -87,6 +87,8 @@
     - AUTHENTICATION
     - Error Handling
     - REST API
+    - Celery
+    - Socket IO
 
 
     - Introduction to express JS.
