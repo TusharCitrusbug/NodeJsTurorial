@@ -1,4 +1,5 @@
 const User = require('../models/users')
+const jwt = require('jsonwebtoken');
 
 exports.create_user = async (req, res) => {
     const user = new User(req.body)
@@ -74,6 +75,8 @@ exports.delete_user = async (req, res) => {
 exports.login_user = async (req, res) => {
     try {
         const user = await User.findByCredentials(req.body.email, req.body.password)
+        const token = jwt.sign({ _id: user.id }, 'thisismynewcourse', { expiresIn: '7 days' })
+        console.log(token);
         res.send(user)
     } catch (e) {
         res.status(400).send("Something went wrong incorrect email or password please try again !")
