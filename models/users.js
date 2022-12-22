@@ -1,7 +1,8 @@
+require('dotenv').config();
 const mongoose = require('mongoose')
 const validator = require('validator')
 const bcrypt = require('bcryptjs')
-
+const jwt = require('jsonwebtoken');
 const userSchema = new mongoose.Schema(
     {
         name: {
@@ -39,8 +40,13 @@ const userSchema = new mongoose.Schema(
                     throw new Error('Password is invalid or it does not contains "password" keyword')
                 }
             }
+        },
+        token: {
+            type: String,
         }
     })
+
+
 
 userSchema.statics.findByCredentials = async (email, password) => {
     const user = await User.findOne({ email })
@@ -66,5 +72,12 @@ userSchema.pre('save', async function (next) {
 
     next()
 })
+
+userSchema.methods.generateAuthToken = async (user) => {
+    const token = jwt.sign({ _id: user.id }, process.env.JWT_KEY, { expiresIn: process.env.TOKEN_EXPIRATION })
+    user.token = token
+    await user.save()
+    return token;
+}
 const User = mongoose.model('User', userSchema)
 module.exports = User

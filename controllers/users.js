@@ -1,13 +1,12 @@
 const User = require('../models/users')
-const jwt = require('jsonwebtoken');
-
 exports.create_user = async (req, res) => {
     const user = new User(req.body)
 
     try {
-        await user.save()
-        res.status(201).send(user)
+        const token = await user.generateAuthToken(user);
+        res.status(201).send({ user, token })
     } catch (e) {
+        console.log(e);
         res.status(400).send(e)
     }
 }
@@ -75,10 +74,23 @@ exports.delete_user = async (req, res) => {
 exports.login_user = async (req, res) => {
     try {
         const user = await User.findByCredentials(req.body.email, req.body.password)
-        const token = jwt.sign({ _id: user.id }, 'thisismynewcourse', { expiresIn: '7 days' })
-        console.log(token);
-        res.send(user)
+        const token = await user.generateAuthToken(user);
+        res.send({ user, token })
     } catch (e) {
         res.status(400).send("Something went wrong incorrect email or password please try again !")
+    }
+}
+
+
+exports.log_out = async (req, res) => {
+    try {
+        console.log("called");
+        const token = req.header('Authorization').replace('Bearer ', '')
+        const user = await User.findOne({ 'token': token })
+        user.token = null
+        await user.save()
+        res.status(200).send("User successfully logged out")
+    } catch (e) {
+        res.status(400).send("Something went wrong incorrect Token!")
     }
 }

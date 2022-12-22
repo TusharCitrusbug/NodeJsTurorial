@@ -87,8 +87,11 @@
     - AUTHENTICATION
     - Error Handling
     - REST API
+    - Celery
+    - Socket IO
 
 
+***************** INTRO***********************
     - Introduction to express JS.
     - Created simple get requests using the express js.
     - Rendered html pages/static files using express js with custom path.
@@ -117,3 +120,7 @@
     - Seperated controllers to another folder and enbaded it to the routes.
     - Added a middle wear to encrypt password in model of user.
     - Password encryption and login user with bcrypt.
+    - Generated a jwt token and stored it to the user model.
+    - Created an auth middleware and checked that if a token is valid or not.
+    - Logout functionality using log-out end point.
+    - Added auth middleware to all end-points.
