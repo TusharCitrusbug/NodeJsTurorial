@@ -12,7 +12,7 @@ exports.create_user = async (req, res) => {
 }
 exports.list_user = async (req, res) => {
     try {
-        const users = await User.find({})
+        const users = await User.find({}).select("id name email age")
         res.send(users)
     } catch (e) {
         res.status(500).send()

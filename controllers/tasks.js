@@ -14,7 +14,7 @@ exports.create_task = async (req, res) => {
 
 exports.list_tasks = async (req, res) => {
     try {
-        const tasks = await Task.find({})
+        let tasks = await Task.find({}).select('title description completed owner').populate('owner','name email age')
         res.send(tasks)
     } catch (e) {
         res.status(500).send(e)
@@ -27,8 +27,7 @@ exports.task_get_by_id = async (req, res) => {
     const _id = req.params.id
 
     try {
-        const task = await Task.findById(_id)
-
+        const task = await Task.findById(_id).select('title description completed owner').populate('owner','name email age')
         if (!task) {
             return res.status(404).send("sorry task not found please check the id you've entered !")
         }
