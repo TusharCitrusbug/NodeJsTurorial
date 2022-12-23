@@ -38,9 +38,20 @@ PopulateUsers.then(() => {
 
 
 const taskCreatingCallBack = () => {
-    const users = userModel.find().all()
+    userModel.find().select('id').then((results) => {
+        results.forEach((task) => {
+            let task_data = {}
+            task_data.title = faker.name.jobTitle()
+            task_data.description = faker.address.city()
+            task_data.completed = false
+            let Task = new TaskModel(task_data);
+            Task.addOwner(task.id, Task)
+            Task.save()
+        })
+    }).catch((e)=>{
+        console.log(e);
+    })
 
-    console.log("this is the next call back!!!!!!!!!!!!", users);
 }
 
 

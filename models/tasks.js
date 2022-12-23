@@ -18,8 +18,8 @@ const TaskSchema = new mongoose.Schema({
     created_at: { type: Date, default: new Date() }
 })
 
-TaskSchema.methods.addOwner = async (user, task) => {
-    task.owner = user.id
+TaskSchema.methods.addOwner = async (user_id, task) => {
+    task.owner = user_id
     return true
 }
 TaskSchema.pre('save', function (next) {
