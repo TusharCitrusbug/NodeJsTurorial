@@ -43,7 +43,14 @@ const userSchema = new mongoose.Schema(
         },
         token: {
             type: String,
-        }
+        },
+        updated_at: { type: Date, default: new Date() },
+        created_at: { type: Date, default: new Date() },
+        isAdmin: {
+            type: Boolean,
+            default:false,
+            require:true
+        },
     })
 
 
@@ -65,7 +72,7 @@ userSchema.statics.findByCredentials = async (email, password) => {
 }
 userSchema.pre('save', async function (next) {
     const user = this
-
+    this.updated_at = Date.now();
     if (user.isModified('password')) {
         user.password = await bcrypt.hash(user.password, 8)
     }

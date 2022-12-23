@@ -16,7 +16,7 @@ exports.create_task = async (req, res) => {
 exports.list_tasks = async (req, res) => {
     try {
         let updatedTasks = []
-        let tasks = await Task.find({}).select('title description completed owner').populate('owner','name email age')
+        let tasks = await Task.find({}).select('title description completed owner created_at updated_at').populate('owner','name email age')
         tasks.forEach((task) => {
             let newObj = {...task.toObject()}
             newObj.detailUrl = `${process.env.HOST_URL}tasks/${task.id}`
