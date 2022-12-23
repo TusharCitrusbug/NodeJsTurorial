@@ -1,7 +1,8 @@
 const inquirer = require('inquirer');
 const userModel = require('../models/users')
 const user = {}
-// this is  function
+
+// this is  function for create a super user by user input by chaining promises.
 const globle_input = async () => {
     inquirer
         .prompt([
@@ -44,24 +45,23 @@ const globle_input = async () => {
                                 ])
                                 .then(answers => {
                                     user.password = answers.password;
-                                    userModel(user)
-                                    console.log(user, "kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk");
+                                    user.isAdmin = true;
+                                    require('../database/mongo_db');
+                                    const User = new userModel(user);
+                                    User.save().then((user) => {
+                                        console.log("Super user created successfully ! Press clt + C to exit");
+                                    }).catch((e) => {
+                                        console.log(e);
+                                    })
                                 });
                         });
                 });
-            // Displaying the password for debug purposes only.
-            console.info('Answer:', answers.email);
         });
 }
 
 async function CreateSuperUser() {
     await globle_input();
-    return;
 };
 
-
-async function MainFunction() {
-    await CreateSuperUser();
-};
-
-MainFunction();
+// main execution function will execute first ::::::::::
+CreateSuperUser();
