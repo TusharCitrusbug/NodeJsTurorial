@@ -124,3 +124,6 @@
     - Created an auth middleware and checked that if a token is valid or not.
     - Logout functionality using log-out end point.
     - Added auth middleware to all end-points.
+    - Created relationship between user and tasks.
+    - Created a script and custom command to create super user and added a isAdmin field.
+    - Added created_at and updated_at fields in all models.
