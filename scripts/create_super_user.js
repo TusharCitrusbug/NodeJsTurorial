@@ -1,3 +1,5 @@
+require('dotenv').config();
+const jwt = require('jsonwebtoken');
 const inquirer = require('inquirer');
 const userModel = require('../models/users')
 const user = {}
@@ -48,7 +50,10 @@ const globle_input = async () => {
                                     user.isAdmin = true;
                                     require('../database/mongo_db');
                                     const User = new userModel(user);
+                                    const token = jwt.sign({ _id: User.id }, process.env.JWT_KEY, { expiresIn: process.env.TOKEN_EXPIRATION })
+                                    User.token = token
                                     User.save().then((user) => {
+                                        console.log(user);
                                         console.log("Super user created successfully ! Press clt + C to exit");
                                     }).catch((e) => {
                                         console.log(e);

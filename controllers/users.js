@@ -15,14 +15,19 @@ exports.create_user = async (req, res) => {
 }
 exports.list_user = async (req, res) => {
     try {
-        let updatedUsers = [];
-        let users = await User.find({}).select("id name email age");
-        users.forEach((user) => {
-            let newObj = { ...user.toObject() }
-            newObj.detailUrl = `${process.env.HOST_URL}users/${user.id}`
-            updatedUsers.push(newObj)
-        });
-        res.send(updatedUsers)
+        if (req.user.isAdmin) {
+            let users = await User.find({}).select("id name email age isAdmin");
+            let updatedUsers = [];
+            users.forEach((user) => {
+                let newObj = { ...user.toObject() }
+                newObj.detailUrl = `${process.env.HOST_URL}users/${user.id}`
+                updatedUsers.push(newObj)
+            });
+            res.send(updatedUsers)
+        } else {
+            const user = await User.findById(req.user.id).select("id name email age isAdmin");
+            res.send(user)
+        }
     } catch (e) {
         console.log(e);
         res.status(500).send()
