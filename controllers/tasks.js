@@ -1,3 +1,4 @@
+require('dotenv').config();
 const Task = require('../models/tasks')
 
 exports.create_task = async (req, res) => {
@@ -14,8 +15,14 @@ exports.create_task = async (req, res) => {
 
 exports.list_tasks = async (req, res) => {
     try {
+        let updatedTasks = []
         let tasks = await Task.find({}).select('title description completed owner').populate('owner','name email age')
-        res.send(tasks)
+        tasks.forEach((task) => {
+            let newObj = {...task.toObject()}
+            newObj.detailUrl = `${process.env.HOST_URL}tasks/${task.id}`
+            updatedTasks.push(newObj)
+        });
+        res.send(updatedTasks)
     } catch (e) {
         res.status(500).send(e)
     }
@@ -38,7 +45,6 @@ exports.task_get_by_id = async (req, res) => {
     }
 }
 
-
 exports.patch_task = async (req, res) => {
     const updates = Object.keys(req.body)
     const allowedUpdates = ['description', 'completed']
@@ -59,7 +65,6 @@ exports.patch_task = async (req, res) => {
         res.status(400).send(e)
     }
 }
-
 
 
 exports.delete_task = async (req, res) => {

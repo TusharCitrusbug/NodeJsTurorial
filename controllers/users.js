@@ -1,4 +1,7 @@
+require('dotenv').config();
+
 const User = require('../models/users')
+
 exports.create_user = async (req, res) => {
     const user = new User(req.body)
 
@@ -12,9 +15,16 @@ exports.create_user = async (req, res) => {
 }
 exports.list_user = async (req, res) => {
     try {
-        const users = await User.find({}).select("id name email age")
-        res.send(users)
+        let updatedUsers = [];
+        let users = await User.find({}).select("id name email age");
+        users.forEach((user) => {
+            let newObj = { ...user.toObject() }
+            newObj.detailUrl = `${process.env.HOST_URL}users/${user.id}`
+            updatedUsers.push(newObj)
+        });
+        res.send(updatedUsers)
     } catch (e) {
+        console.log(e);
         res.status(500).send()
     }
 }
@@ -22,7 +32,7 @@ exports.get_user_by_id = async (req, res) => {
     const _id = req.params.id
 
     try {
-        const user = await User.findById(_id)
+        const user = await User.findById(_id).select("id name email age")
 
         if (!user) {
             return res.status(404).send("sorry user not found please check the id you've entered !")

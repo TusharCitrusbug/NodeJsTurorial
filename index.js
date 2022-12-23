@@ -1,14 +1,12 @@
 require('./database/mongo_db')
-
-const User = require('./models/users')
-const Task = require('./models/tasks')
+require('dotenv').config();
 const user_routes = require('./routers/users');
 const tasks_routes = require('./routers/tasks');
 
 const express = require('express');
 
 const app = express();
-const port = 3000;
+const port = Number(process.env.PROJECT_PORT);
 const logger = require('morgan');
 
 app.use(logger('dev'));
