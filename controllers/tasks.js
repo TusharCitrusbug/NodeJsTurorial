@@ -2,7 +2,7 @@ const Task = require('../models/tasks')
 
 exports.create_task = async (req, res) => {
     const task = new Task(req.body)
-
+    task.addOwner(req.user, task)
     try {
         await task.save()
         res.status(201).send(task)

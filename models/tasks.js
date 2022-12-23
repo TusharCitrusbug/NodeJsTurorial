@@ -1,6 +1,5 @@
 const mongoose = require('mongoose')
-const validator = require('validator')
-const Task = mongoose.model('Task', {
+const TaskSchema = new mongoose.Schema( {
     title: {
         type: String,
         required: true, unique: true
@@ -10,7 +9,18 @@ const Task = mongoose.model('Task', {
     },
     completed: {
         type: Boolean
+    },
+    owner: {
+        type: mongoose.Schema.Types.ObjectId,
+        required: true,
     }
 })
+
+TaskSchema.methods.addOwner = async (user,task) => {
+    task.owner =  user.id
+    return true
+}
+
+const Task = mongoose.model('Task', TaskSchema)
 
 module.exports = Task
