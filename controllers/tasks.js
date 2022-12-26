@@ -1,5 +1,5 @@
 require('dotenv').config();
-const Task = require('../models/tasks')
+const Task = require('../models/tasks');
 
 exports.create_task = async (req, res) => {
     const task = new Task(req.body)
@@ -14,10 +14,15 @@ exports.create_task = async (req, res) => {
 
 
 exports.list_tasks = async (req, res) => {
+    const match = {}
+
+    if (req.query.completed) {
+        match.completed = req.query.completed === 'true'
+    }
     try {
         if (req.user.isAdmin) {
             let updatedTasks = []
-            let tasks = await Task.find({}).select('title description completed owner createdAt updatedAt').populate('owner', 'name email age')
+            let tasks = await Task.find(match).select('title description completed owner createdAt updatedAt').populate('owner', 'name email age')
             tasks.forEach((task) => {
                 let newObj = { ...task.toObject() }
                 newObj.detailUrl = `${process.env.HOST_URL}tasks/${task.id}`
@@ -25,7 +30,8 @@ exports.list_tasks = async (req, res) => {
             });
             res.send(updatedTasks)
         } else {
-            let task = await Task.find({ owner: req.user.id }).select('title description completed owner createdAt updatedAt').populate('owner', 'name email age')
+            match.owner = req.user.id
+            let task = await Task.find(match).select('title description completed owner createdAt updatedAt').populate('owner', 'name email age')
             res.send(task)
         }
     } catch (e) {

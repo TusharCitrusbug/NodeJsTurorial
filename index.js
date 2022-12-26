@@ -18,6 +18,10 @@ app.use(user_routes)
 // all tasks routes
 app.use(tasks_routes)
 
+const multer = require('multer');
+const upload = multer({
+
+})
 // app.post('/users', (req, res) => {
 //     const user = new User(req.body)
 //     user.save().then(() => {
