@@ -48,6 +48,7 @@ const createTasks = async () => {
             task_data.title = faker.name.jobTitle()
             task_data.description = faker.address.city()
             task_data.completed = false
+            task_data.task_image = 'media/index.jpeg'
             task_data.owner = user._id
             CreateSingleTask(task_data);
         })

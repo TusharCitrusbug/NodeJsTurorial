@@ -2,31 +2,31 @@
     "users": [
         {
             "name": "test_user1",
-            "email": "test1@gmail.com",
+            "email": "test1@yopmail.com",
             "age": 25,
             "password": "test@1234"
         },
         {
             "name": "test_user2",
-            "email": "test2@gmail.com",
+            "email": "test2@yopmail.com",
             "age": 25,
             "password": "test@1234"
         },
         {
             "name": "test_user3",
-            "email": "test3@gmail.com",
+            "email": "test3@yopmail.com",
             "age": 25,
             "password": "test@1234"
         },
         {
             "name": "test_user4",
-            "email": "test4@gmail.com",
+            "email": "test4@yopmail.com",
             "age": 25,
             "password": "test@1234"
         },
         {
             "name": "test_user5",
-            "email": "test5@gmail.com",
+            "email": "test5@yopmail.com",
             "age": 25,
             "password": "test@1234"
         }

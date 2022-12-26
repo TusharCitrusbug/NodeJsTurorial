@@ -11,3 +11,8 @@ HOST_URL =
 
 DB_PORT = 
 DB_NAME = 
+
+
+SENDGRID_API_KEY=''
+
+SENDGRID_ENABLED = false
