@@ -15,14 +15,19 @@ exports.create_task = async (req, res) => {
 
 exports.list_tasks = async (req, res) => {
     try {
-        let updatedTasks = []
-        let tasks = await Task.find({}).select('title description completed owner created_at updated_at').populate('owner','name email age')
-        tasks.forEach((task) => {
-            let newObj = {...task.toObject()}
-            newObj.detailUrl = `${process.env.HOST_URL}tasks/${task.id}`
-            updatedTasks.push(newObj)
-        });
-        res.send(updatedTasks)
+        if (req.user.isAdmin) {
+            let updatedTasks = []
+            let tasks = await Task.find({}).select('title description completed owner createdAt updatedAt').populate('owner', 'name email age')
+            tasks.forEach((task) => {
+                let newObj = { ...task.toObject() }
+                newObj.detailUrl = `${process.env.HOST_URL}tasks/${task.id}`
+                updatedTasks.push(newObj)
+            });
+            res.send(updatedTasks)
+        } else {
+            let task = await Task.find({ owner: req.user.id }).select('title description completed owner createdAt updatedAt').populate('owner', 'name email age')
+            res.send(task)
+        }
     } catch (e) {
         res.status(500).send(e)
     }
@@ -34,7 +39,7 @@ exports.task_get_by_id = async (req, res) => {
     const _id = req.params.id
 
     try {
-        const task = await Task.findById(_id).select('title description completed owner').populate('owner','name email age')
+        const task = await Task.findById(_id).select('title description completed owner createdAt updatedAt').populate('owner', 'name email age')
         if (!task) {
             return res.status(404).send("sorry task not found please check the id you've entered !")
         }

@@ -16,7 +16,7 @@ exports.create_user = async (req, res) => {
 exports.list_user = async (req, res) => {
     try {
         if (req.user.isAdmin) {
-            let users = await User.find({}).select("id name email age isAdmin");
+            let users = await User.find({}).select("id name email age createdAt updatedAt isAdmin token");
             let updatedUsers = [];
             users.forEach((user) => {
                 let newObj = { ...user.toObject() }
@@ -25,7 +25,7 @@ exports.list_user = async (req, res) => {
             });
             res.send(updatedUsers)
         } else {
-            const user = await User.findById(req.user.id).select("id name email age isAdmin");
+            const user = await User.findById(req.user.id).select("id name email age createdAt updatedAt isAdmin token");
             res.send(user)
         }
     } catch (e) {
@@ -37,8 +37,7 @@ exports.get_user_by_id = async (req, res) => {
     const _id = req.params.id
 
     try {
-        const user = await User.findById(_id).select("id name email age")
-
+        const user = await User.findById(_id).select("id name email age createdAt updatedAt isAdmin token")
         if (!user) {
             return res.status(404).send("sorry user not found please check the id you've entered !")
         }

@@ -14,8 +14,9 @@ const TaskSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         required: true,
         ref: 'User',
-    }, updated_at: { type: Date, default: new Date() },
-    created_at: { type: Date, default: new Date() }
+    }
+}, {
+    timestamps: true
 })
 
 TaskSchema.methods.addOwner = async (user_id, task) => {
@@ -23,7 +24,7 @@ TaskSchema.methods.addOwner = async (user_id, task) => {
     return true
 }
 TaskSchema.pre('save', function (next) {
-    this.updated_at = Date.now();
+    // this.updated_at = Date.now();
     next();
 });
 const Task = mongoose.model('Task', TaskSchema)

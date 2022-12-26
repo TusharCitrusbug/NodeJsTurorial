@@ -11,7 +11,7 @@ router.post('/tasks', auth, controllers.create_task)
 
 router.get('/tasks', auth, controllers.list_tasks)
 
-router.get('/tasks/:id', auth, controllers.task_get_by_id)
+router.get('/tasks/:id', auth,superUserAuth, controllers.task_get_by_id)
 
 router.patch('/tasks/:id', auth, controllers.patch_task)
 
