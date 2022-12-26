@@ -16,7 +16,7 @@ const uploader = multer({
 
 // async methods for task
 
-router.post('/tasks', auth, controllers.create_task)
+router.post('/tasks', auth,uploader.single('task_image'), controllers.create_task)
 
 router.get('/tasks', auth, controllers.list_tasks)
 

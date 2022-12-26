@@ -2,6 +2,12 @@ require('dotenv').config();
 const Task = require('../models/tasks');
 
 exports.create_task = async (req, res) => {
+    if (!req.file) {
+        res.status(404).json({
+            error: "Uploaded file should not be empty or sould be with required mimetype jpg/png.",
+        })
+    }
+    req.body.task_image = req.file.path
     const task = new Task(req.body)
     task.addOwner(req.user.id, task)
     try {
@@ -22,7 +28,7 @@ exports.list_tasks = async (req, res) => {
     try {
         if (req.user.isAdmin) {
             let updatedTasks = []
-            let tasks = await Task.find(match).select('title description completed owner createdAt updatedAt').populate('owner', 'name email age')
+            let tasks = await Task.find(match).select('title description completed owner createdAt updatedAt task_image').populate('owner', 'name email age')
             tasks.forEach((task) => {
                 let newObj = { ...task.toObject() }
                 newObj.detailUrl = `${process.env.HOST_URL}tasks/${task.id}`
@@ -45,7 +51,7 @@ exports.task_get_by_id = async (req, res) => {
     const _id = req.params.id
 
     try {
-        const task = await Task.findById(_id).select('title description completed owner createdAt updatedAt').populate('owner', 'name email age')
+        const task = await Task.findById(_id).select('title description completed owner createdAt updatedAt task_image').populate('owner', 'name email age')
         if (!task) {
             return res.status(404).send("sorry task not found please check the id you've entered !")
         }
