@@ -9,7 +9,7 @@ const multer = require('multer');
 
 // included all components to multer 
 const uploader = multer({
-    storage: storage_utils.Storage('./media/'), limits: {
+    storage: storage_utils.Storage('../static/media/'), limits: {
         fieldSize: 1024 * 1024 * 5
     }, fileFilter: storage_utils.FileFilter(['image/jpeg', 'image/png'])
 })

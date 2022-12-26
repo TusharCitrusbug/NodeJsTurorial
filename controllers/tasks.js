@@ -2,6 +2,8 @@ require('dotenv').config();
 const Task = require('../models/tasks');
 
 exports.create_task = async (req, res) => {
+    console.log("sdjkfhsjdhsjdhsjdh");
+    console.log(req.file,"(((((((((((((((((((");
     if (!req.file) {
         res.status(404).json({
             error: "Uploaded file should not be empty or sould be with required mimetype jpg/png.",

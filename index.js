@@ -11,7 +11,7 @@ const logger = require('morgan');
 
 app.use(logger('dev'));
 app.use(express.json());
-app.use(express.static('media'))
+app.use(express.static('static'))
 // all user routes
 app.use(user_routes)
 
