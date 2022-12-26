@@ -1,7 +1,8 @@
 require('dotenv').config();
 const sendgrid = require('../utils/sendgrid_mail')
 const User = require('../models/users')
-let email_feature = true?process.env.SENDGRID_ENABLED==='true':false
+let email_feature = true ? process.env.SENDGRID_ENABLED === 'true' : false;
+
 exports.create_user = async (req, res) => {
     const user = new User(req.body)
 
@@ -9,8 +10,7 @@ exports.create_user = async (req, res) => {
         const token = await user.generateAuthToken(user);
         if (email_feature) {
             const msg = {
-                to: 'test@example.com', // Change to your recipient
-                from: 'test@example.com', // Change to your verified sender
+                to: user.email, // Change to your recipient
                 subject: 'User Created',
                 text: `User created successfully. Try this token -> ${token} to login.`,
                 html: `<strong>Welcome ${user.email} User! You have created your account successfully!</strong>`,

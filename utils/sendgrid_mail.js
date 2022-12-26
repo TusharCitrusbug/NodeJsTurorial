@@ -10,6 +10,8 @@ sgMail.setApiKey(process.env.SENDGRID_API_KEY)
 // }
 
 exports.sendMail = (msg) => {
+    msg.from = process.env.SENDER_ID
+    console.log(msg);
     sgMail
         .send(msg)
         .then((response) => {
