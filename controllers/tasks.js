@@ -20,23 +20,8 @@ exports.create_task = async (req, res) => {
     }
 }
 
-const paginatedObject = (filter_obj,length) => {
-    if (filter_obj.page_size && filter_obj.page_no) {
-        if (parseInt(filter_obj.page_size) !== length) {
-            let paginate_obj = {};
-            console.log("xxxxxxxxxxxxxxxxx");
-            paginate_obj.next_page = `${process.env.HOST_URL}tasks?page_no=${parseInt(filter_obj.page_no) + 1}&page_size=${filter_obj.page_size}`
-            if (parseInt(filter_obj.page_no) !== 1) {
-                paginate_obj.previous_page = `${process.env.HOST_URL}tasks?page_no=${parseInt(filter_obj.page_no) - 1}&page_size=${filter_obj.page_size}`
-            }
-            return paginate_obj
-        }
-    }
-}
-
 exports.list_tasks = async (req, res) => {
     let filter_obj = QueryString.parse(url.parse(req.url).query)
-    console.log(filter_obj);
     try {
         if (req.user.isAdmin) {
             let updatedTasks = []
@@ -46,12 +31,19 @@ exports.list_tasks = async (req, res) => {
                 newObj.detailUrl = `${process.env.HOST_URL}tasks/${task.id}`
                 updatedTasks.push(newObj)
             });
-            console.log(paginatedObject(filter_obj,updatedTasks.length));
-            // updatedTasks(paginatedObject(filter_obj))
+            let paginate_obj = {};
+            if (filter_obj.page_size && filter_obj.page_no) {
+                    paginate_obj.next_page = `${process.env.HOST_URL}tasks?page_no=${parseInt(filter_obj.page_no) + 1}&page_size=${filter_obj.page_size}`
+                    if (parseInt(filter_obj.page_no) !== 1) {
+                        paginate_obj.previous_page = `${process.env.HOST_URL}tasks?page_no=${parseInt(filter_obj.page_no) - 1}&page_size=${filter_obj.page_size}`
+                    }
+                    updatedTasks.push(paginate_obj)
+            }
             res.send(updatedTasks)
         } else {
             filter_obj.owner = req.user.id
             let task = await Task.find(filter_obj).select('title description completed owner createdAt updatedAt').populate('owner', 'name email age').limit(parseInt(filter_obj.page_size)).skip(parseInt(filter_obj.page_size) * parseInt(filter_obj.page_no))
+            updatedTasks(paginatedObject(filter_obj, task.length))
             res.send(task)
         }
     } catch (e) {
