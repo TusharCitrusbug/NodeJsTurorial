@@ -13,8 +13,6 @@ exports.Storage = (path) => {
 }
 
 exports.FileFilter = (file_mimetypes) => {
-    console.log("here---------------");
-    console.log(file_mimetypes);
     const filter = (req, file, cb) => {
         let check = false;
         file_mimetypes.forEach(element => {

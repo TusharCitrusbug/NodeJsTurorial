@@ -1,9 +1,9 @@
 require('dotenv').config();
 const Task = require('../models/tasks');
-
+const csv_ganerator = require('../utils/csv_generator')
+const QueryString = require('querystring');
+const url = require('url');
 exports.create_task = async (req, res) => {
-    console.log("sdjkfhsjdhsjdhsjdh");
-    console.log(req.file,"(((((((((((((((((((");
     if (!req.file) {
         res.status(404).json({
             error: "Uploaded file should not be empty or sould be with required mimetype jpg/png.",
@@ -20,26 +20,38 @@ exports.create_task = async (req, res) => {
     }
 }
 
+const paginatedObject = (filter_obj,length) => {
+    if (filter_obj.page_size && filter_obj.page_no) {
+        if (parseInt(filter_obj.page_size) !== length) {
+            let paginate_obj = {};
+            console.log("xxxxxxxxxxxxxxxxx");
+            paginate_obj.next_page = `${process.env.HOST_URL}tasks?page_no=${parseInt(filter_obj.page_no) + 1}&page_size=${filter_obj.page_size}`
+            if (parseInt(filter_obj.page_no) !== 1) {
+                paginate_obj.previous_page = `${process.env.HOST_URL}tasks?page_no=${parseInt(filter_obj.page_no) - 1}&page_size=${filter_obj.page_size}`
+            }
+            return paginate_obj
+        }
+    }
+}
 
 exports.list_tasks = async (req, res) => {
-    const match = {}
-
-    if (req.query.completed) {
-        match.completed = req.query.completed === 'true'
-    }
+    let filter_obj = QueryString.parse(url.parse(req.url).query)
+    console.log(filter_obj);
     try {
         if (req.user.isAdmin) {
             let updatedTasks = []
-            let tasks = await Task.find(match).select('title description completed owner createdAt updatedAt task_image').populate('owner', 'name email age')
+            let tasks = await Task.find(filter_obj).select('title description completed owner createdAt updatedAt task_image').populate('owner', 'name email age').limit(parseInt(filter_obj.page_size)).skip(parseInt(filter_obj.page_size) * parseInt(filter_obj.page_no))
             tasks.forEach((task) => {
                 let newObj = { ...task.toObject() }
                 newObj.detailUrl = `${process.env.HOST_URL}tasks/${task.id}`
                 updatedTasks.push(newObj)
             });
+            console.log(paginatedObject(filter_obj,updatedTasks.length));
+            // updatedTasks(paginatedObject(filter_obj))
             res.send(updatedTasks)
         } else {
-            match.owner = req.user.id
-            let task = await Task.find(match).select('title description completed owner createdAt updatedAt').populate('owner', 'name email age')
+            filter_obj.owner = req.user.id
+            let task = await Task.find(filter_obj).select('title description completed owner createdAt updatedAt').populate('owner', 'name email age').limit(parseInt(filter_obj.page_size)).skip(parseInt(filter_obj.page_size) * parseInt(filter_obj.page_no))
             res.send(task)
         }
     } catch (e) {
@@ -47,11 +59,24 @@ exports.list_tasks = async (req, res) => {
     }
 }
 
-
+exports.get_tasks_csv = async (req, res) => {
+    let filter_obj = QueryString.parse(url.parse(req.url).query)
+    filter_obj.owner = req.user.id
+    try {
+        let tasks = await Task.find(filter_obj).select('title description completed owner createdAt updatedAt')
+        let tasksForCsv = []
+        tasks.forEach(task => {
+            tasksForCsv.push(task.toObject())
+        })
+        let csv_path = csv_ganerator.csvGenerator(tasksForCsv, 'task_csv')
+        res.send({ message: "Csv generated successfully !", path: csv_path })
+    } catch (e) {
+        res.status(500).send(e)
+    }
+}
 
 exports.task_get_by_id = async (req, res) => {
-    const _id = req.params.id
-
+    const _id = req.params.id;
     try {
         const task = await Task.findById(_id).select('title description completed owner createdAt updatedAt task_image').populate('owner', 'name email age')
         if (!task) {

@@ -9,13 +9,14 @@ const HeaderGenerator = (data) => {
   return headers;
 }
 
-exports.csvGenerator = (data) => {
+exports.csvGenerator = (data,name) => {
+  let csv_path = `static/csv/${new Date().toISOString()}${name}.csv`
   const csvWriter = createCsvWriter({
-    path: `../csv/${new Date()}data.csv`,
+    path: csv_path,
     header: HeaderGenerator(data)
   });
   csvWriter
     .writeRecords(data)
-    .then(() => console.log('The CSV file was written successfully'));
-
+    .then((x) => console.log('The CSV file was written successfully'));
+  return csv_path
 }

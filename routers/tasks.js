@@ -9,16 +9,17 @@ const multer = require('multer');
 
 // included all components to multer 
 const uploader = multer({
-    storage: storage_utils.Storage('../static/media/'), limits: {
+    storage: storage_utils.Storage('./static/media'), limits: {
         fieldSize: 1024 * 1024 * 5
     }, fileFilter: storage_utils.FileFilter(['image/jpeg', 'image/png'])
 })
 
 // async methods for task
 
-router.post('/tasks', auth,uploader.single('task_image'), controllers.create_task)
+router.post('/tasks', auth, uploader.single('task_image'), controllers.create_task)
 
 router.get('/tasks', auth, controllers.list_tasks)
+router.get('/get_tasks_csv', auth, controllers.get_tasks_csv)
 
 router.get('/tasks/:id', auth, superUserAuth, controllers.task_get_by_id)
 
