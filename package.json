@@ -4,7 +4,7 @@
   "description": "My First Package",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest --watch",
     "createSuperUser": "node scripts/create_super_user.js",
     "populate_db": "node scripts/populate_db.js"
   },
@@ -43,6 +43,7 @@
     "validator": "^13.7.0"
   },
   "devDependencies": {
-    "@faker-js/faker": "^7.6.0"
+    "@faker-js/faker": "^7.6.0",
+    "jest": "^29.3.1"
   }
 }
