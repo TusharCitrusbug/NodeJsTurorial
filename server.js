@@ -1,56 +1,28 @@
-const httpServer = require("http").createServer();
-const io = require('socket.io')(httpServer, {
-    cors: {
-        origin: '*',
-    }
-})
-const path = require('path')
-const users = {};
+const xmpp_server_1 = require('simple-xmpp');
 
-io.on('connection', socket => {
-    // user join event
-    socket.on('new-user-joined', name => {
-        users[socket.id] = name;
-        socket.broadcast.emit("user-joined", name)
-    });
+const sender1 = () => {
+    setTimeout(sender1, 5000);
+    xmpp_server_1.send('root@localhost', "root-----------")
+}
 
-    // send message event
-    socket.on('send-message', message => {
-        socket.broadcast.emit("receive-message", { message: message, name: users[socket.id] })
-    });
-
-    // calling
-    socket.on("create_call", created_call => {
-        console.log(created_call);
-        socket.broadcast.emit('receive_call',created_call)
-    })
-
-    socket.on("receive_call", receive_call => {
-        console.log(receive_call);
-    })
-    socket.on('disconnect', message => {
-        socket.broadcast.emit("left", users[socket.id]);
-        delete users[socket.id]
-    });
+// server-1
+xmpp_server_1.connect({
+    "jid": "admin@localhost",
+    "password": "passw0rd",
+    "host": "localhost",
+    "port": 5222
 })
 
-httpServer.listen(8000)
-
-
-// main server 
-
-const express = require('express');
-
-const app = express();
-const publicDirectoryPath = path.join(__dirname, './public')
-const viewsPath = path.join(__dirname, './templates/views')
-app.use(express.static(publicDirectoryPath))
-app.set('views', viewsPath);
-app.set('view engine', 'ejs');
-
-app.use(express.urlencoded({ extended: false }))
-app.get('', (req, resp) => {
-    resp.render('chat')
+xmpp_server_1.on('online', data => {
+    console.log('heyyyyyyyy you are online', data);
+    sender1();
 })
 
-app.listen(3000)
+xmpp_server_1.on('error', error => {
+    console.log('error', error);
+})
+
+
+xmpp_server_1.on('chat', (from, message) => {
+    console.log(`message ${message}`, from);
+})

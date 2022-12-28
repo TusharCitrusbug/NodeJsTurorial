@@ -23,11 +23,13 @@
   "dependencies": {
     "colors": "^1.4.0",
     "cookie-parser": "^1.4.6",
+    "ejabberd": "^0.2.5",
     "ejs": "^3.1.8",
     "express": "^4.18.2",
     "express-generator": "^4.16.1",
     "express-validator": "^6.14.2",
     "nodemon": "^2.0.20",
+    "simple-xmpp": "^2.3.1",
     "socket.io": "^4.5.4",
     "socket.io-client": "^4.5.4"
   }

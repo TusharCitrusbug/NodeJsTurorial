@@ -106,5 +106,5 @@
             - apply with app.use() on entire application
 
 
-# Socket-IO in node
+# Exploring ejabberd and created a server in xmpp
 
