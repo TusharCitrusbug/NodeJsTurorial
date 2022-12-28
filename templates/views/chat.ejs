@@ -18,12 +18,19 @@
 
 <body>
     <div class="container">
+        
     </div>
     <div class="send">
         <form action="#" id="send-container">
             <textarea rows="4" cols="4" type="text" name="messageInp" id="messageInp"></textarea>
             <button class="btn" type="submit">Send</button>
         </form>
+        <div class="call" style="margin-top: 0%;position: absolute;">
+            <form action="#" id="caller-container">
+                <input type="text" name="caller_id" id="caller_id" placeholder="Enter Caller Id:">
+                <button id="call_now" type="submit">Call Now</button>
+            </form>
+        </div>
     </div>
     <script src="http://localhost:8000/socket.io/socket.io.js"></script>
     <script>

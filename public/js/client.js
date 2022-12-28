@@ -1,7 +1,11 @@
 const socket = io("http://localhost:8000")
 
-const form = document.getElementById('send-container');
+const chat_form = document.getElementById('send-container');
+const call_form = document.getElementById('caller-container');
+
 const messageInput = document.getElementById('messageInp');
+const callerInput = document.getElementById('caller_id');
+
 const messageContainer = document.querySelector('.container');
 
 const clear_text_area = () => {
@@ -26,7 +30,7 @@ socket.on('user-joined', (data) => {
 
 
 
-form.addEventListener('submit', (e) => {
+chat_form.addEventListener('submit', (e) => {
     e.preventDefault();
     const message = messageInput.value;
     append(`You: ${message}`, "right")
@@ -45,4 +49,20 @@ socket.on('left', (data) => {
     if (data !==null) {
         append(`${data} left the chat`, 'left')
     }
+})
+
+
+call_form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const caller_id = callerInput.value;
+    socket.emit('create_call', {to:caller_id,from:user_name})
+    callerInput.value = ''
+})
+
+
+socket.on('receive_call', (data) => {
+    console.log(data);
+    let span = document.createElement('span')
+    span.innerHTML = `${data.from} is Calling...................`
+    call_form.append(span)
 })

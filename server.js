@@ -19,6 +19,15 @@ io.on('connection', socket => {
         socket.broadcast.emit("receive-message", { message: message, name: users[socket.id] })
     });
 
+    // calling
+    socket.on("create_call", created_call => {
+        console.log(created_call);
+        socket.broadcast.emit('receive_call',created_call)
+    })
+
+    socket.on("receive_call", receive_call => {
+        console.log(receive_call);
+    })
     socket.on('disconnect', message => {
         socket.broadcast.emit("left", users[socket.id]);
         delete users[socket.id]
