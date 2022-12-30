@@ -1,27 +1,11 @@
 require('./database/mongo_db')
 require('dotenv').config();
-const user_routes = require('./routers/users');
-const tasks_routes = require('./routers/tasks');
-
-const express = require('express');
-
-const app = express();
 const port = Number(process.env.PROJECT_PORT);
-const logger = require('morgan');
+const app = require('./app')
+// const multer = require('multer');
+// const upload = multer({
 
-app.use(logger('dev'));
-app.use(express.json());
-app.use(express.static('static'))
-// all user routes
-app.use(user_routes)
-
-// all tasks routes
-app.use(tasks_routes)
-
-const multer = require('multer');
-const upload = multer({
-
-})
+// })
 // app.post('/users', (req, res) => {
 //     const user = new User(req.body)
 //     user.save().then(() => {

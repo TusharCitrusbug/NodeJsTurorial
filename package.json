@@ -4,9 +4,12 @@
   "description": "My First Package",
   "main": "index.js",
   "scripts": {
-    "test": "jest --watch",
+    "test": "env-cmd -f ./test.env jest --watch",
     "createSuperUser": "node scripts/create_super_user.js",
     "populate_db": "node scripts/populate_db.js"
+  },
+  "jest": {
+    "testEnvironment": "node"
   },
   "repository": {
     "type": "git",
@@ -36,6 +39,7 @@
     "faker": "^6.6.6",
     "inquirer": "^8.2.5",
     "jsonwebtoken": "^9.0.0",
+    "mongodb-memory-server": "^8.10.2",
     "mongoose": "^6.8.1",
     "morgan": "^1.10.0",
     "multer": "^1.4.5-lts.1",
@@ -44,6 +48,7 @@
   },
   "devDependencies": {
     "@faker-js/faker": "^7.6.0",
-    "jest": "^29.3.1"
+    "jest": "^29.3.1",
+    "supertest": "^3.4.2"
   }
 }
