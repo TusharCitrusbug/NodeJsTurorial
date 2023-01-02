@@ -45,7 +45,7 @@ exports.list_user = async (req, res) => {
 }
 exports.get_user_by_id = async (req, res) => {
     const _id = req.params.id
-
+    
     try {
         const user = await User.findById(_id).select("id name email age createdAt updatedAt isAdmin token")
         if (!user) {
