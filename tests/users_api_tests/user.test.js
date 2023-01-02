@@ -70,12 +70,12 @@ test('test delete user by id', async () => {
 
 // it'll run after each test cases
 afterEach(async () => {
-    console.log("called after each");
     await dbHandler.dropCollections();
 });
 
+// it'll run after all test cases
+
 afterAll(async () => {
-    console.log("called after all");
     await dbHandler.dropCollections();
     await dbHandler.dropDB();
 });

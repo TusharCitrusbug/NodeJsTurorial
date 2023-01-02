@@ -26,7 +26,7 @@ beforeAll(async () => {
 test('test list tasks', async () => {
     let user = await new User(SuperUserdata);
     user.save();
-    await test_helper.list_tasks(5,user._id)
+    await test_helper.list_tasks(5, user._id)
     request(app).get('/tasks').set('Authorization', 'Bearer ' + user.token).send({}).expect(201)
 })
 
@@ -57,12 +57,10 @@ test('test list tasks', async () => {
 
 // it'll run after each test cases
 afterEach(async () => {
-    console.log("called after each");
     await dbHandler.dropCollections();
 });
 
 afterAll(async () => {
-    console.log("called after all");
     await dbHandler.dropCollections();
     await dbHandler.dropDB();
 });
