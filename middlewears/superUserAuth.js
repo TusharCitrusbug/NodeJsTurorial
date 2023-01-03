@@ -1,7 +1,6 @@
 require('dotenv').config();
 const superUserAuth = async (req, res, next) => {
     if (process.env.TOKEN_AUTH === 'enabled') {
-
         try {
             if (req.user.isAdmin) {
                 console.log(`WELCOME ${req.user.email}: MR SUPER USER`);

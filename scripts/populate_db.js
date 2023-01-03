@@ -6,6 +6,12 @@ const users = require('./populate/populate_users.json').users
 const userModel = require('../models/users')
 const TaskModel = require('../models/tasks')
 const { faker } = require('@faker-js/faker');
+let task_data = {
+    title: faker.name.jobTitle(),
+    description: faker.address.city(),
+    completed: false,
+    task_image: 'static/media/index.jpeg',
+}
 
 let users_ids = []
 const CreateSingleUser = async (user) => {
@@ -34,30 +40,46 @@ const createTasks = async () => {
     let usersList = await userModel.find({}).select('id')
     if (usersList.length === 0) {
         users_ids.forEach(id => {
-            let task_data = {}
-            task_data.title = faker.name.jobTitle()
-            task_data.description = faker.address.city()
-            task_data.completed = false
-            task_data.task_image = 'static/media/index.jpeg'
+            let task_data = {
+                title: faker.name.jobTitle(),
+                description: faker.address.city(),
+                completed: false,
+                task_image: 'static/media/index.jpeg',
+            }
             task_data.owner = id
             CreateSingleTask(task_data);
         })
+    } else if (usersList.length === 1) {
+        for (let index = 0; index < 5; index++) {
+            let task_data = {
+                title: faker.name.jobTitle(),
+                description: faker.address.city(),
+                completed: false,
+                task_image: 'static/media/index.jpeg',
+            }
+            task_data.owner = usersList[0]._id
+            CreateSingleTask(task_data);
+        }
     } else {
         usersList.forEach(user => {
-            let task_data = {}
-            task_data.title = faker.name.jobTitle()
-            task_data.description = faker.address.city()
-            task_data.completed = false
-            task_data.task_image = 'media/index.jpeg'
+            let task_data = {
+                title: faker.name.jobTitle(),
+                description: faker.address.city(),
+                completed: false,
+                task_image: 'static/media/index.jpeg',
+            }
             task_data.owner = user._id
             CreateSingleTask(task_data);
         })
+
     }
 }
 
 const PopulateDb = async () => {
     let allUsers = await userModel.find({});
     if (allUsers.length === 0) {
+        await createUsers();
+    } else if (allUsers.length === 1) {
         await createUsers();
     }
     await createTasks();
