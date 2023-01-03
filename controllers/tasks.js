@@ -22,10 +22,13 @@ exports.create_task = async (req, res) => {
 
 exports.list_tasks = async (req, res) => {
     let filter_obj = QueryString.parse(url.parse(req.url).query)
+    let page_size = parseInt(filter_obj.page_size);
+    let page_no = parseInt(filter_obj.page_no);
+
     try {
         if (req.user.isAdmin) {
             let updatedTasks = []
-            let tasks = await Task.find(filter_obj).select('title description completed owner createdAt updatedAt task_image').populate('owner', 'name email age').limit(parseInt(filter_obj.page_size)).skip(parseInt(filter_obj.page_size) * parseInt(filter_obj.page_no))
+            let tasks = await Task.find(filter_obj).select('title description completed owner createdAt updatedAt task_image').populate('owner', 'name email age').limit(page_size).skip((page_no - 1) * page_size)
             tasks.forEach((task) => {
                 let newObj = { ...task.toObject() }
                 newObj.detailUrl = `${process.env.HOST_URL}tasks/${task.id}`
@@ -33,17 +36,19 @@ exports.list_tasks = async (req, res) => {
             });
             let paginate_obj = {};
             if (filter_obj.page_size && filter_obj.page_no) {
-                    paginate_obj.next_page = `${process.env.HOST_URL}tasks?page_no=${parseInt(filter_obj.page_no) + 1}&page_size=${filter_obj.page_size}`
-                    if (parseInt(filter_obj.page_no) !== 1) {
-                        paginate_obj.previous_page = `${process.env.HOST_URL}tasks?page_no=${parseInt(filter_obj.page_no) - 1}&page_size=${filter_obj.page_size}`
-                    }
-                    updatedTasks.push(paginate_obj)
+                if (!(tasks.length % page_size === tasks.length)) {
+                    paginate_obj.next_page = `${process.env.HOST_URL}tasks?page_no=${page_no + 1}&page_size=${filter_obj.page_size}`
+                }
+                if (page_no !== 1) {
+                    paginate_obj.previous_page = `${process.env.HOST_URL}tasks?page_no=${page_no - 1}&page_size=${page_size}`
+                }
+                updatedTasks.push(paginate_obj)
             }
             res.send(updatedTasks)
         } else {
+            let updatedTasks = []
             filter_obj.owner = req.user.id
-            let task = await Task.find(filter_obj).select('title description completed owner createdAt updatedAt').populate('owner', 'name email age').limit(parseInt(filter_obj.page_size)).skip(parseInt(filter_obj.page_size) * parseInt(filter_obj.page_no))
-            updatedTasks(paginatedObject(filter_obj, task.length))
+            let task = await Task.find(filter_obj).select('title description completed owner createdAt updatedAt').populate('owner', 'name email age').limit(page_size).skip((page_no - 1) * page_size)
             res.send(task)
         }
     } catch (e) {
