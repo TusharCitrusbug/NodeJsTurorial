@@ -127,3 +127,6 @@
     - Created relationship between user and tasks.
     - Created a script and custom command to create super user and added a isAdmin field.
     - Added created_at and updated_at fields in all models.
+
+
+    ***** Deployment*****
