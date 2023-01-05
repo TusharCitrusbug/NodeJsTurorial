@@ -5,10 +5,17 @@ const scheduler_timer = { hour: parseInt(process.env.SCHEDULER_HOURS), minute: p
 const timer_for_every_minit = process.env.SCHEDULER_CHRONES
 console.log("called");
 exports.tasks_complition_job = scheduler.scheduleJob(timer_for_every_minit, function () {
-    Task.find({}).exec().then((tasks => {
-        tasks.forEach(task => {
-            Task.findByIdAndUpdate(task._id, {completed:true}, { new: true, runValidators: true })
-            console.log(`Updated task with title ${task.title} successfully !`);
-        })
+    Task.find({ expired: false }).exec().then((tasks => {
+        if (tasks.length !== 0) {
+            tasks.forEach(task => {
+                Task.updateOne({ _id: task._id }, { $set: { expired: true } }).exec().then(res => {
+                    console.log(`Expired task with title "${task.title}" successfully !`);
+                }).catch(err => {
+                    console.log(err);
+                })
+            })
+        }else{
+            console.log("No tasks for expiration");
+        }
     }))
 });

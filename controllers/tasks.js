@@ -28,7 +28,7 @@ exports.list_tasks = async (req, res) => {
     try {
         if (req.user.isAdmin) {
             let updatedTasks = []
-            let tasks = await Task.find(filter_obj).select('title description completed owner createdAt updatedAt task_image').populate('owner', 'name email age').limit(page_size).skip((page_no - 1) * page_size)
+            let tasks = await Task.find(filter_obj).select('title description expired completed owner createdAt updatedAt task_image').populate('owner', 'name email age').limit(page_size).skip((page_no - 1) * page_size)
             tasks.forEach((task) => {
                 let newObj = { ...task.toObject() }
                 newObj.detailUrl = `${process.env.HOST_URL}tasks/${task.id}`
@@ -48,7 +48,7 @@ exports.list_tasks = async (req, res) => {
         } else {
             let updatedTasks = []
             filter_obj.owner = req.user.id
-            let task = await Task.find(filter_obj).select('title description completed owner createdAt updatedAt').populate('owner', 'name email age').limit(page_size).skip((page_no - 1) * page_size)
+            let task = await Task.find(filter_obj).select('title description expired completed owner createdAt updatedAt').populate('owner', 'name email age').limit(page_size).skip((page_no - 1) * page_size)
             res.send(task)
         }
     } catch (e) {
@@ -60,7 +60,7 @@ exports.get_tasks_csv = async (req, res) => {
     let filter_obj = QueryString.parse(url.parse(req.url).query)
     filter_obj.owner = req.user.id
     try {
-        let tasks = await Task.find(filter_obj).select('title description completed owner createdAt updatedAt')
+        let tasks = await Task.find(filter_obj).select('title description expired completed owner createdAt updatedAt')
         let tasksForCsv = []
         tasks.forEach(task => {
             tasksForCsv.push(task.toObject())

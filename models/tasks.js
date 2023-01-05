@@ -9,12 +9,16 @@ const TaskSchema = new mongoose.Schema({
     },
     completed: {
         type: Boolean,
-        default:false
+        default: false
     },
     owner: {
         type: mongoose.Schema.Types.ObjectId,
         required: true,
         ref: 'User',
+    },
+    expired: {
+        type: Boolean,
+        default: false
     },
     task_image: { type: String, required: true }
 }, {
