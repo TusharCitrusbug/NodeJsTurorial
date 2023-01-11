@@ -1,19 +1,6 @@
 const router = require('express').Router();
-const passportSetup = require('../config/passport-setup')
-const passport = require('passport')
-const User = require('../models/user')
+const passport = require('passport');
 
-
-passport.serializeUser((user, done) => {
-    done(user._id)
-})
-
-passport.deserializeUser((id, done) => {
-    User.findById(id).then(user => {
-        done(null,user)
-    })
-})
-passport.use(passportSetup.strategy)
 // auth login
 router.get('/login', (req, res) => {
     res.render('login', { user: req.user });
@@ -33,7 +20,7 @@ router.get('/google', passport.authenticate('google', {
 
 // callback handler for google redirect
 router.get('/google/redirect', passport.authenticate('google'), (req, resp) => {
-    console.log(req.query)
+    console.log("here---------for redirection------------");
     resp.send('you reached the callback URI')
 })
 module.exports = router;
