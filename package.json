@@ -1,0 +1,23 @@
+{
+  "name": "oauth",
+  "version": "1.0.0",
+  "description": "Oauth learning",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/TusharCitrusbug/NodeJsTurorial/tree/oauth"
+  },
+  "author": "Tushar Prajapati",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/TusharCitrusbug/NodeJsTurorial/issues"
+  },
+  "homepage": "https://github.com/TusharCitrusbug/NodeJsTurorial/tree/oauth",
+  "dependencies": {
+    "ejs": "^2.5.7",
+    "express": "^4.16.1"
+  }
+}
