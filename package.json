@@ -17,9 +17,11 @@
   },
   "homepage": "https://github.com/TusharCitrusbug/NodeJsTurorial/tree/oauth",
   "dependencies": {
+    "cookie-session": "^2.0.0",
     "dotenv": "^16.0.3",
     "ejs": "^2.5.7",
     "express": "^4.16.1",
+    "mongoose": "^6.8.3",
     "passport": "^0.6.0",
     "passport-google-oauth": "^2.0.0",
     "passport-google-oauth20": "^2.0.0"

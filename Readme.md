@@ -107,3 +107,13 @@
         Application level middleware
             - apply with app.use() on entire application
 
+
+
+
+CONNECT WITH MONGODB ATLAS ONLINE 
+mongosh "mongodb+srv://cluster0.jg6kygs.mongodb.net/myFirstDatabase" --apiVersion 1 --username TusharCitrusbug
+
+
+CONNECT WITH COMPASS
+
+mongodb+srv://TusharCitrusbug:<password>@cluster0.jg6kygs.mongodb.net/test
