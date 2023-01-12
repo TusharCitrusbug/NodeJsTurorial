@@ -130,3 +130,12 @@
 
 
     ***** Deployment*****
+
+
+
+
+Changes 
+
+fix passport sessions
+custom logger using event emmitor
+video streaming using streams
