@@ -6,6 +6,11 @@ const cookieSession = require('cookie-session');
 const session = require('express-session')
 const passport = require('passport')
 const app = express();
+const { logged_in_event, logged_out_event } = require('./events');
+
+logged_in_event.emit("loggedIn", { tushar: 'tusar' })
+logged_out_event.emit("loggedOut", { tushar: 'tusar' })
+
 // set view engine
 app.set('view engine', 'ejs');
 app.use(cookieSession({
