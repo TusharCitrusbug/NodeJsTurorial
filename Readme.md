@@ -117,3 +117,10 @@ mongosh "mongodb+srv://cluster0.jg6kygs.mongodb.net/myFirstDatabase" --apiVersio
 CONNECT WITH COMPASS
 
 mongodb+srv://TusharCitrusbug:<password>@cluster0.jg6kygs.mongodb.net/test
+
+
+
+
+
+### Web worker:(Normal js topic)    
+which will run heavy tasks in background and till we can perform other tasks.
